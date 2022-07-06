@@ -1,3 +1,12 @@
+// Document Elements
+const bodyContainer = document.querySelector("#body-container");
+const resultsContainer = document.querySelector("#results");
+const playerScoreMsg = document.createElement("p");
+const computerScoreMsg = document.createElement("p");
+const gameNum = document.createElement("p");
+const defaultMsg = document.createElement("p");
+const finalGameMsg = document.createElement("h2");
+
 // Randomly returns either 'Rock', 'Paper, or 'Scissors'
 function computerPlay() {
   let compPlayArr = ["Rock", "Paper", "Scissors"];
@@ -17,7 +26,6 @@ function playRound(playerSelection, computerSelection) {
   let playerSelected = playerSelection.toLowerCase();
   let message, result;
 
-  const bodyContainer = document.querySelector("#body-container");
   let gameResultMsg = document.createElement("p");
   gameResultMsg.classList.add("gameResultMsg");
 
@@ -72,7 +80,6 @@ function playRound(playerSelection, computerSelection) {
 
     default:
       // console.log("Unknown selection");
-      const defaultMsg = document.createElement("p");
       defaultMsg.classList.add("defaultMsg");
       defaultMsg.textContent = "Unknown Selection";
       bodyContainer.appendChild(defaultMsg);
@@ -89,18 +96,11 @@ function game() {
     computerScore = 0,
     gameCount = 1;
 
-  const resultsContainer = document.querySelector("#results");
-  let gameNum = document.createElement("p");
   gameNum.classList.add("gameNum");
-
-  let playerScoreMsg = document.createElement("p");
   playerScoreMsg.classList.add("playerScoreMsg");
-
-  let computerScoreMsg = document.createElement("p");
   computerScoreMsg.classList.add("computerScoreMsg");
 
   let computerSelection = computerPlay();
-
   const buttons = document.querySelectorAll("button");
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
@@ -119,11 +119,11 @@ function game() {
     playerScore += 0;
     computerScore += 0;
   }
-  gameNum.textContent = "Game " + gameCount;
+  gameNum.textContent = `Game ${gameCount}`;
   gameCount++;
 
-  playerScoreMsg.textContent = "Player Score: " + playerScore;
-  computerScoreMsg.textContent = "Computer Score: " + computerScore;
+  playerScoreMsg.textContent = `Player Score: ${playerScore}`;
+  computerScoreMsg.textContent = `Computer Score: ${computerScore}`;
 
   resultsContainer.appendChild(gameNum);
   resultsContainer.appendChild(playerScoreMsg);
@@ -131,11 +131,12 @@ function game() {
 
   const message =
     playerScore > computerScore ? "Player Wins!" : "Computer Wins!";
-  const finalGameMsg = document.createElement("h2");
   finalGameMsg.classList.add("finalGameMsg");
   finalGameMsg.textContent = message;
 
   resultsContainer.appendChild(finalGameMsg);
 }
+
+function gameOver() {}
 
 game();
