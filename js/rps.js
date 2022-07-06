@@ -1,10 +1,9 @@
 // Randomly returns either 'Rock', 'Paper, or 'Scissors'
 function computerPlay() {
-  // Rock = 0, Paper = 1, Scissors = 2
-  let play = Math.floor(Math.random() * 3);
-  // console.log(play)
-  let result = play === 0 ? "Rock" : play === 1 ? "Paper" : "Scissors";
-
+  let compPlayArr = ["Rock", "Paper", "Scissors"];
+  let play = Math.floor(Math.random() * compPlayArr.length);
+  let result = compPlayArr[play];
+  // console.log(result);
   return result;
 }
 
@@ -18,8 +17,10 @@ function playRound(playerSelection, computerSelection) {
   let playerSelected = playerSelection.toLowerCase();
   let message, result;
 
+  const bodyContainer = document.querySelector("#body-container");
+
   switch (playerSelected) {
-    case "rock":
+    case "rock-button":
       message =
         computerSelection === "Rock"
           ? "Tie!"
@@ -35,7 +36,7 @@ function playRound(playerSelection, computerSelection) {
       }
       break;
 
-    case "paper":
+    case "paper-button":
       message =
         computerSelection === "Rock"
           ? "You Win! Paper beats Rock"
@@ -51,7 +52,7 @@ function playRound(playerSelection, computerSelection) {
       }
       break;
 
-    case "scissors":
+    case "scissors-button":
       message =
         computerSelection === "Rock"
           ? "You Lose! Rock beats Scissors"
@@ -68,7 +69,11 @@ function playRound(playerSelection, computerSelection) {
       break;
 
     default:
-      console.log("Unknown selection");
+      // console.log("Unknown selection");
+      const defaultMsg = document.createElement("p");
+      defaultMsg.classList.add("defaultMsg");
+      defaultMsg.textContent = "Unknown Selection";
+      bodyContainer.appendChild(defaultMsg);
   }
   return result;
 }
@@ -78,25 +83,34 @@ function playRound(playerSelection, computerSelection) {
 function game() {
   let resultMap = new Map();
   let playerScore = 0,
-    computerScore = 0;
-  for (let i = 0; i < 5; i++) {
-    const playerSelection = prompt("Enter Rock or Paper or Scissors");
-    const computerSelection = computerPlay();
-    resultMap.set(i, playRound(playerSelection, computerSelection));
+    computerScore = 0,
+    gameCount = 0;
 
-    if (resultMap.get(i) == "You Win!") {
+  while (playerScore < 5 || computerScore < 5) {
+    const computerSelection = computerPlay();
+
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        // console.log(button.id);
+        let playerSelection = button.id;
+        resultMap.set(gameCount, playRound(playerSelection, computerSelection));
+      });
+    });
+
+    if (resultMap.get(gameCount) == "You Win!") {
       playerScore += 1;
-    } else if (resultMap.get(i) == "You Lose") {
+    } else if (resultMap.get(gameCount) == "You Lose") {
       computerScore += 1;
     } else {
       // Tie
       playerScore += 0;
       computerScore += 0;
     }
+    gameCount++;
   }
-
-  let message = playerScore > computerScore ? "Player Wins!" : "Computer Wins!";
-  return message;
+  // let message = playerScore > computerScore ? "Player Wins!" : "Computer Wins!";
+  // return message;
 }
 
-console.log(game());
+game();
