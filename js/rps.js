@@ -18,6 +18,8 @@ function playRound(playerSelection, computerSelection) {
   let message, result;
 
   const bodyContainer = document.querySelector("#body-container");
+  let gameResultMsg = document.createElement("p");
+  gameResultMsg.classList.add("gameResultMsg");
 
   switch (playerSelected) {
     case "rock-button":
@@ -27,7 +29,7 @@ function playRound(playerSelection, computerSelection) {
           : computerSelection === "Paper"
           ? "You Lose! Paper beats Rock"
           : "You Win! Rock beats Scissors";
-      console.log(message);
+      gameResultMsg.textContent = message;
 
       if (message != "Tie!") {
         result = message.substring(0, 8);
@@ -43,7 +45,7 @@ function playRound(playerSelection, computerSelection) {
           : computerSelection === "Paper"
           ? "Tie!"
           : "You Lose! Paper beats Rock";
-      console.log(message);
+      gameResultMsg.textContent = message;
 
       if (message != "Tie!") {
         result = message.substring(0, 8);
@@ -59,7 +61,7 @@ function playRound(playerSelection, computerSelection) {
           : computerSelection === "Paper"
           ? "You Win! Scissors beats Paper"
           : "Tie!";
-      console.log(message);
+      gameResultMsg.textContent = message;
 
       if (message != "Tie!") {
         result = message.substring(0, 8);
@@ -75,6 +77,7 @@ function playRound(playerSelection, computerSelection) {
       defaultMsg.textContent = "Unknown Selection";
       bodyContainer.appendChild(defaultMsg);
   }
+  bodyContainer.appendChild(gameResultMsg);
   return result;
 }
 
@@ -84,33 +87,55 @@ function game() {
   let resultMap = new Map();
   let playerScore = 0,
     computerScore = 0,
-    gameCount = 0;
+    gameCount = 1;
 
-  while (playerScore < 5 || computerScore < 5) {
-    const computerSelection = computerPlay();
+  const resultsContainer = document.querySelector("#results");
+  let gameNum = document.createElement("p");
+  gameNum.classList.add("gameNum");
 
-    const buttons = document.querySelectorAll("button");
-    buttons.forEach((button) => {
-      button.addEventListener("click", () => {
-        // console.log(button.id);
-        let playerSelection = button.id;
-        resultMap.set(gameCount, playRound(playerSelection, computerSelection));
-      });
+  let playerScoreMsg = document.createElement("p");
+  playerScoreMsg.classList.add("playerScoreMsg");
+
+  let computerScoreMsg = document.createElement("p");
+  computerScoreMsg.classList.add("computerScoreMsg");
+
+  let computerSelection = computerPlay();
+
+  const buttons = document.querySelectorAll("button");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      // console.log(button.id);
+      let playerSelection = button.id;
+      resultMap.set(gameCount, playRound(playerSelection, computerSelection));
     });
+  });
 
-    if (resultMap.get(gameCount) == "You Win!") {
-      playerScore += 1;
-    } else if (resultMap.get(gameCount) == "You Lose") {
-      computerScore += 1;
-    } else {
-      // Tie
-      playerScore += 0;
-      computerScore += 0;
-    }
-    gameCount++;
+  if (resultMap.get(gameCount) == "You Win!") {
+    playerScore += 1;
+  } else if (resultMap.get(gameCount) == "You Lose") {
+    computerScore += 1;
+  } else {
+    // Tie
+    playerScore += 0;
+    computerScore += 0;
   }
-  // let message = playerScore > computerScore ? "Player Wins!" : "Computer Wins!";
-  // return message;
+  gameNum.textContent = "Game " + gameCount;
+  gameCount++;
+
+  playerScoreMsg.textContent = "Player Score: " + playerScore;
+  computerScoreMsg.textContent = "Computer Score: " + computerScore;
+
+  resultsContainer.appendChild(gameNum);
+  resultsContainer.appendChild(playerScoreMsg);
+  resultsContainer.appendChild(computerScoreMsg);
+
+  const message =
+    playerScore > computerScore ? "Player Wins!" : "Computer Wins!";
+  const finalGameMsg = document.createElement("h2");
+  finalGameMsg.classList.add("finalGameMsg");
+  finalGameMsg.textContent = message;
+
+  resultsContainer.appendChild(finalGameMsg);
 }
 
 game();
