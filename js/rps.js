@@ -93,22 +93,23 @@ function isGameOver() {
 function game(playerSelection) {
   if (isGameOver()) {
     return gameOverMsg();
+  } else {
+    gameCount++;
+    gameNum.classList.add("gameNum");
+    gameNum.textContent = `Game ${gameCount}`;
+
+    let computerSelection = computerPlay();
+    playRound(playerSelection, computerSelection);
+
+    playerScoreTally.classList.add("playerScoreTally");
+    playerScoreTally.textContent = `Player Score: ${playerScore}`;
+    computerScoreTally.classList.add("computerScoreTally");
+    computerScoreTally.textContent = `Computer Score: ${computerScore}`;
+
+    resultsContainer.appendChild(gameNum);
+    resultsContainer.appendChild(playerScoreTally);
+    resultsContainer.appendChild(computerScoreTally);
   }
-  gameCount++;
-  gameNum.classList.add("gameNum");
-  gameNum.textContent = `Game ${gameCount}`;
-
-  let computerSelection = computerPlay();
-  playRound(playerSelection, computerSelection);
-
-  playerScoreTally.classList.add("playerScoreTally");
-  playerScoreTally.textContent = `Player Score: ${playerScore}`;
-  computerScoreTally.classList.add("computerScoreTally");
-  computerScoreTally.textContent = `Computer Score: ${computerScore}`;
-
-  resultsContainer.appendChild(gameNum);
-  resultsContainer.appendChild(playerScoreTally);
-  resultsContainer.appendChild(computerScoreTally);
 }
 
 // Helper Functions
@@ -116,7 +117,7 @@ function gameOverMsg() {
   playerScore > computerScore
     ? (finalGameMsg.textContent = "Player Wins!")
     : (finalGameMsg.textContent = "Computer Wins!");
-  return resultsContainer.appendChild(finalGameMsg);
+  resultsContainer.appendChild(finalGameMsg);
 }
 
 function capitalizeFirstLetter(string) {
